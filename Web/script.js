@@ -3,6 +3,7 @@ const target = document.getElementById("target");
 const strengthSlider = document.getElementById("strength");
 const directionSelect = document.getElementById("direction");
 const scoreDisplay = document.getElementById("score");
+const moveTargetBtn = document.getElementById("moveTarget");
 
 let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let vel = { x: 0, y: 0 };
@@ -15,6 +16,9 @@ function placeTarget() {
   target.style.top = Math.random() * window.innerHeight + "px";
 }
 placeTarget();
+
+// Button click moves target
+moveTargetBtn.addEventListener("click", placeTarget);
 
 // Track mouse movement as external force
 window.addEventListener("mousemove", (e) => {
