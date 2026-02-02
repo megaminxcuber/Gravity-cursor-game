@@ -9,12 +9,18 @@ let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let vel = { x: 0, y: 0 };
 let mouseForce = { x: 0, y: 0 };
 let score = 0;
+let highScore = 0;
+let lastHitTime = 0;
+let difficulty = "easy"; // default mode
 
-// Load score from localStorage if available
+// Load scores from localStorage
 if (localStorage.getItem("gravityScore")) {
   score = parseInt(localStorage.getItem("gravityScore"), 10);
-  scoreDisplay.textContent = "Score: " + score;
 }
+if (localStorage.getItem("gravityHighScore")) {
+  highScore = parseInt(localStorage.getItem("gravityHighScore"), 10);
+}
+updateScoreDisplay();
 
 // Place target randomly
 function placeTarget() {
@@ -33,7 +39,17 @@ window.addEventListener("mousemove", (e) => {
 });
 
 function getGravityVector() {
-  const strength = parseFloat(strengthSlider.value);
+  let strength = parseFloat(strengthSlider.value);
+
+  // Difficulty modes
+  if (difficulty === "easy") strength *= 0.5;
+  if (difficulty === "hard") strength *= 1.5;
+  if (difficulty === "chaos") {
+    // Random direction every frame
+    const angle = Math.random() * Math.PI * 2;
+    return { x: Math.cos(angle) * strength, y: Math.sin(angle) * strength };
+  }
+
   switch (directionSelect.value) {
     case "down":
       return { x: 0, y: strength };
@@ -58,15 +74,32 @@ function checkCollision() {
 
   if (dist < 25) {
     // collision radius
-    // Score depends on gravity strength
     const gravityStrength = parseFloat(strengthSlider.value);
-    const points = Math.max(1, Math.round(gravityStrength * 10));
-    score += points;
+    let points = Math.max(1, Math.round(gravityStrength * 10));
 
-    scoreDisplay.textContent = "Score: " + score + " (+" + points + ")";
-    localStorage.setItem("gravityScore", score); // save score
+    // Combo bonus: if hit within 3s of last hit, double points
+    const now = Date.now();
+    if (now - lastHitTime < 3000) {
+      points *= 2;
+    }
+    lastHitTime = now;
+
+    score += points;
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem("gravityHighScore", highScore);
+    }
+
+    updateScoreDisplay(points);
+    localStorage.setItem("gravityScore", score);
     placeTarget();
   }
+}
+
+function updateScoreDisplay(lastPoints = 0) {
+  scoreDisplay.textContent =
+    `Score: ${score} (High: ${highScore})` +
+    (lastPoints > 0 ? ` (+${lastPoints})` : "");
 }
 
 function animate() {
@@ -82,7 +115,7 @@ function animate() {
 
   // Bounce off walls
   if (pos.x <= 0 || pos.x >= window.innerWidth) {
-    vel.x *= -0.7; // reverse and dampen
+    vel.x *= -0.7;
     pos.x = Math.max(0, Math.min(window.innerWidth, pos.x));
   }
   if (pos.y <= 0 || pos.y >= window.innerHeight) {
@@ -100,7 +133,7 @@ function animate() {
   mouseForce.x *= 0.5;
   mouseForce.y *= 0.5;
 
-  // Check collision with target
+  // Check collision
   checkCollision();
 
   requestAnimationFrame(animate);
@@ -115,7 +148,10 @@ window.addEventListener("keydown", (e) => {
   }
   if (e.key.toLowerCase() === "c") {
     score = 0;
-    scoreDisplay.textContent = "Score: " + score;
-    localStorage.setItem("gravityScore", score); // reset storage
+    updateScoreDisplay();
+    localStorage.setItem("gravityScore", score);
   }
+  if (e.key.toLowerCase() === "1") difficulty = "easy";
+  if (e.key.toLowerCase() === "2") difficulty = "hard";
+  if (e.key.toLowerCase() === "3") difficulty = "chaos";
 });
