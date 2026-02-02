@@ -1,21 +1,45 @@
-<div id="controls">
-  Gravity Strength:
-  <input
-    type="range"
-    id="strength"
-    min="0"
-    max="2"
-    step="0.1"
-    value="0.5"
-  /><br />
-  Direction:
-  <select id="direction">
-    <option value="down">Down</option>
-    <option value="up">Up</option>
-    <option value="left">Left</option>
-    <option value="right">Right</option>
-    <option value="diag">Diagonal</option></select
-  ><br />
-  <span id="score">Score: 0</span><br />
-  <button id="moveTarget">Move Target</button>
-</div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mouse Gravity Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Cursor (cyan circle) -->
+    <div id="cursor"></div>
+
+    <!-- Target (green circle) -->
+    <div id="target"></div>
+
+    <!-- Control panel -->
+    <div id="controls">
+      Gravity Strength:
+      <input
+        type="range"
+        id="strength"
+        min="0"
+        max="2"
+        step="0.1"
+        value="0.5"
+      /><br />
+
+      Direction:
+      <select id="direction">
+        <option value="down">Down</option>
+        <option value="up">Up</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="diag">Diagonal</option></select
+      ><br />
+
+      <span id="score">Score: 0</span><br />
+
+      <!-- Button to move target manually -->
+      <button id="moveTarget">Move Target</button>
+    </div>
+
+    <!-- Game logic -->
+    <script src="script.js"></script>
+  </body>
+</html>
