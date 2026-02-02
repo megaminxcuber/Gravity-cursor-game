@@ -4,6 +4,7 @@ const strengthSlider = document.getElementById("strength");
 const directionSelect = document.getElementById("direction");
 const scoreDisplay = document.getElementById("score");
 const moveTargetBtn = document.getElementById("moveTarget");
+const difficultySelect = document.getElementById("difficulty");
 
 let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let vel = { x: 0, y: 0 };
@@ -11,7 +12,7 @@ let mouseForce = { x: 0, y: 0 };
 let score = 0;
 let highScore = 0;
 let lastHitTime = 0;
-let difficulty = "easy"; // default mode
+let difficulty = difficultySelect.value; // default from dropdown
 
 // Load scores from localStorage
 if (localStorage.getItem("gravityScore")) {
@@ -32,6 +33,11 @@ placeTarget();
 // Button click moves target
 moveTargetBtn.addEventListener("click", placeTarget);
 
+// Difficulty dropdown change
+difficultySelect.addEventListener("change", () => {
+  difficulty = difficultySelect.value;
+});
+
 // Track mouse movement as external force
 window.addEventListener("mousemove", (e) => {
   mouseForce.x = (e.clientX - pos.x) * 0.01;
@@ -45,7 +51,6 @@ function getGravityVector() {
   if (difficulty === "easy") strength *= 0.5;
   if (difficulty === "hard") strength *= 1.5;
   if (difficulty === "chaos") {
-    // Random direction every frame
     const angle = Math.random() * Math.PI * 2;
     return { x: Math.cos(angle) * strength, y: Math.sin(angle) * strength };
   }
@@ -76,6 +81,10 @@ function checkCollision() {
     // collision radius
     const gravityStrength = parseFloat(strengthSlider.value);
     let points = Math.max(1, Math.round(gravityStrength * 10));
+
+    // Difficulty multipliers
+    if (difficulty === "hard") points = Math.round(points * 1.5);
+    if (difficulty === "chaos") points = Math.round(points * 2); // Chaos > Hard
 
     // Combo bonus: if hit within 3s of last hit, double points
     const now = Date.now();
@@ -151,7 +160,10 @@ window.addEventListener("keydown", (e) => {
     updateScoreDisplay();
     localStorage.setItem("gravityScore", score);
   }
-  if (e.key.toLowerCase() === "1") difficulty = "easy";
-  if (e.key.toLowerCase() === "2") difficulty = "hard";
-  if (e.key.toLowerCase() === "3") difficulty = "chaos";
+  if (e.key.toLowerCase() === "1")
+    ((difficultySelect.value = "easy"), (difficulty = "easy"));
+  if (e.key.toLowerCase() === "2")
+    ((difficultySelect.value = "hard"), (difficulty = "hard"));
+  if (e.key.toLowerCase() === "3")
+    ((difficultySelect.value = "chaos"), (difficulty = "chaos"));
 });
