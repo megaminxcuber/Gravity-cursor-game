@@ -10,6 +10,12 @@ let vel = { x: 0, y: 0 };
 let mouseForce = { x: 0, y: 0 };
 let score = 0;
 
+// Load score from localStorage if available
+if (localStorage.getItem("gravityScore")) {
+  score = parseInt(localStorage.getItem("gravityScore"), 10);
+  scoreDisplay.textContent = "Score: " + score;
+}
+
 // Place target randomly
 function placeTarget() {
   target.style.left = Math.random() * window.innerWidth + "px";
@@ -58,6 +64,7 @@ function checkCollision() {
     score += points;
 
     scoreDisplay.textContent = "Score: " + score + " (+" + points + ")";
+    localStorage.setItem("gravityScore", score); // save score
     placeTarget();
   }
 }
@@ -100,3 +107,15 @@ function animate() {
 }
 
 animate();
+
+// 🎮 Keyboard shortcuts
+window.addEventListener("keydown", (e) => {
+  if (e.key.toLowerCase() === "r") {
+    placeTarget(); // respawn target
+  }
+  if (e.key.toLowerCase() === "c") {
+    score = 0;
+    scoreDisplay.textContent = "Score: " + score;
+    localStorage.setItem("gravityScore", score); // reset storage
+  }
+});
