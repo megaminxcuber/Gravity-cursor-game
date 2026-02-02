@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Mouse Gravity Simulation</title>
+    <title>Mouse Gravity Game</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="cursor"></div>
+    <div id="target"></div>
     <div id="controls">
       Gravity Strength:
       <input
@@ -23,8 +24,9 @@
         <option value="up">Up</option>
         <option value="left">Left</option>
         <option value="right">Right</option>
-        <option value="diag">Diagonal</option>
-      </select>
+        <option value="diag">Diagonal</option></select
+      ><br />
+      <span id="score">Score: 0</span>
     </div>
 
     <script src="script.js"></script>

@@ -1,10 +1,20 @@
 const cursor = document.getElementById("cursor");
+const target = document.getElementById("target");
 const strengthSlider = document.getElementById("strength");
 const directionSelect = document.getElementById("direction");
+const scoreDisplay = document.getElementById("score");
 
 let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let vel = { x: 0, y: 0 };
 let mouseForce = { x: 0, y: 0 };
+let score = 0;
+
+// Place target randomly
+function placeTarget() {
+  target.style.left = Math.random() * window.innerWidth + "px";
+  target.style.top = Math.random() * window.innerHeight + "px";
+}
+placeTarget();
 
 // Track mouse movement as external force
 window.addEventListener("mousemove", (e) => {
@@ -28,6 +38,22 @@ function getGravityVector() {
   }
 }
 
+function checkCollision() {
+  const cursorRect = cursor.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+
+  const dx = cursorRect.left - targetRect.left;
+  const dy = cursorRect.top - targetRect.top;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  if (dist < 25) {
+    // collision radius
+    score++;
+    scoreDisplay.textContent = "Score: " + score;
+    placeTarget();
+  }
+}
+
 function animate() {
   const gravity = getGravityVector();
 
@@ -39,19 +65,28 @@ function animate() {
   pos.x += vel.x;
   pos.y += vel.y;
 
-  // Clamp to screen bounds
-  pos.x = Math.max(0, Math.min(window.innerWidth, pos.x));
-  pos.y = Math.max(0, Math.min(window.innerHeight, pos.y));
+  // Bounce off walls
+  if (pos.x <= 0 || pos.x >= window.innerWidth) {
+    vel.x *= -0.7; // reverse and dampen
+    pos.x = Math.max(0, Math.min(window.innerWidth, pos.x));
+  }
+  if (pos.y <= 0 || pos.y >= window.innerHeight) {
+    vel.y *= -0.7;
+    pos.y = Math.max(0, Math.min(window.innerHeight, pos.y));
+  }
 
-  // Render
+  // Render cursor
   cursor.style.left = pos.x + "px";
   cursor.style.top = pos.y + "px";
 
-  // Decay velocity & mouse force
-  vel.x *= 0.9;
-  vel.y *= 0.9;
+  // Decay forces
+  vel.x *= 0.95;
+  vel.y *= 0.95;
   mouseForce.x *= 0.5;
   mouseForce.y *= 0.5;
+
+  // Check collision with target
+  checkCollision();
 
   requestAnimationFrame(animate);
 }
