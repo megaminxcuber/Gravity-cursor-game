@@ -48,8 +48,12 @@ function checkCollision() {
 
   if (dist < 25) {
     // collision radius
-    score++;
-    scoreDisplay.textContent = "Score: " + score;
+    // Score depends on gravity strength
+    const gravityStrength = parseFloat(strengthSlider.value);
+    const points = Math.max(1, Math.round(gravityStrength * 10));
+    score += points;
+
+    scoreDisplay.textContent = "Score: " + score + " (+" + points + ")";
     placeTarget();
   }
 }
