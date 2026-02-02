@@ -1,12 +1,25 @@
 body {
-  background-color: #000000;
-  color: #ffffff;
+  margin: 0;
+  height: 100vh;
+  background: #111;
+  overflow: hidden;
+  cursor: none; /* hide real cursor */
 }
-button {
-  background-color: #444444;
-  color: #bbbbbb;
-  border: 5px solid #ff7300;
-  padding: 10px 20px;
-  font-size: 16px;
-  box-shadow: #444444 100px 100px 100px;
+
+#cursor {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: cyan;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+#controls {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-family: sans-serif;
 }

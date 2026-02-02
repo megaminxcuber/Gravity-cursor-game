@@ -1,13 +1,32 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="style.css" />
-    <script defer src="script.js"></script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mouse Gravity Simulation</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-
   <body>
-    <button>chicken banana</button>
+    <div id="cursor"></div>
+    <div id="controls">
+      Gravity Strength:
+      <input
+        type="range"
+        id="strength"
+        min="0"
+        max="2"
+        step="0.1"
+        value="0.5"
+      /><br />
+      Direction:
+      <select id="direction">
+        <option value="down">Down</option>
+        <option value="up">Up</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="diag">Diagonal</option>
+      </select>
+    </div>
+
+    <script src="script.js"></script>
   </body>
 </html>
