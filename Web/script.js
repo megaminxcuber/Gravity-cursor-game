@@ -167,3 +167,15 @@ window.addEventListener("keydown", (e) => {
   if (e.key.toLowerCase() === "3")
     ((difficultySelect.value = "chaos"), (difficulty = "chaos"));
 });
+
+function rgbifyText(selector) {
+  const element = document.querySelector(selector);
+  const text = element.textContent;
+  element.innerHTML = text
+    .split("")
+    .map((char) => `<span>${char}</span>`)
+    .join("");
+}
+
+// Apply to any element with class="rgb"
+rgbifyText(".rgb");
