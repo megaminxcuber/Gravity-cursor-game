@@ -1,4 +1,14 @@
 /* Reset body */
+.rgb span:nth-child(3n + 1) {
+  color: rgb(255, 0, 0);
+}
+.rgb span:nth-child(3n + 2) {
+  color: rgb(0, 255, 0);
+}
+.rgb span:nth-child(3n + 3) {
+  color: rgb(0, 0, 255);
+}
+
 body {
   margin: 0;
   height: 100vh;
