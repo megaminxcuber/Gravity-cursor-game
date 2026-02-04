@@ -73,3 +73,26 @@ body {
 #moveTarget:hover {
   background-color: #666;
 }
+
+select {
+  appearance: none; /* remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: #111; /* dark background */
+  color: #fff; /* default text color */
+  padding: 8px 12px;
+  border: 2px solid #444;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border 0.3s,
+    box-shadow 0.3s;
+}
+
+select:hover {
+  border-color: #888;
+  box-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+}
